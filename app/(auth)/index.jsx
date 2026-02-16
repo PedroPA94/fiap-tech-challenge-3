@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import Botao from "../components/botao";
 import Input from "../components/input";
@@ -16,11 +17,21 @@ const LoginScreen = () => {
 
       <View style={styles.inputContainer}>
         <Input
-          placeholder="Email"
+          label="Email"
+          placeholder="exemplo@email.com"
+          icon={<Ionicons name="mail-outline" size={20} color="#94A3B8" />}
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        <Input style={styles.input} placeholder="Senha" secureTextEntry />
+        <Input
+          label="Senha"
+          placeholder="••••••••"
+          icon={
+            <Ionicons name="lock-closed-outline" size={20} color="#94A3B8" />
+          }
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
         <Botao onPress={() => {}}>Entrar</Botao>
         <Botao onPress={() => {}} secundario>
           Criar conta
