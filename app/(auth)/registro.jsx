@@ -1,28 +1,26 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import Botao from "../components/botao";
 import Input from "../components/input";
-import Logo from "../components/logo";
 import Texto from "../components/texto";
 import { colors, spacing, typography } from "../styles/theme";
 
-const LoginScreen = () => {
-  const router = useRouter();
-
-  const criarConta = () => {
-    router.push("/registro");
-  };
-
+const Registro = () => {
   return (
     <View style={styles.container}>
-      <Logo />
       <View style={styles.pageTitle}>
-        <Texto style={styles.title}>Bytebank</Texto>
-        <Texto style={styles.subtitle}>Você no controle do seu futuro</Texto>
+        <Texto style={styles.title}>Criar conta</Texto>
+        <Texto style={styles.subtitle}>
+          Comece a organizar sua vida financeira {"\n"}hoje mesmo!
+        </Texto>
       </View>
 
       <View style={styles.inputContainer}>
+        <Input
+          label="Nome completo"
+          placeholder="Seu nome"
+          icon={<Ionicons name="person-outline" size={20} color="#94A3B8" />}
+        />
         <Input
           label="Email"
           placeholder="exemplo@email.com"
@@ -36,40 +34,35 @@ const LoginScreen = () => {
           icon={
             <Ionicons name="lock-closed-outline" size={20} color="#94A3B8" />
           }
-          keyboardType="email-address"
-          autoCapitalize="none"
+          secureTextEntry
         />
-        <Botao onPress={() => {}}>Entrar</Botao>
-        <Botao onPress={criarConta} secundario>
-          Criar conta
-        </Botao>
       </View>
+      <Botao onPress={() => {}} style={{ marginTop: spacing.md }}>
+        Cadastrar
+      </Botao>
     </View>
   );
 };
 
-export default LoginScreen;
+export default Registro;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
     padding: spacing.lg,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: spacing.xl,
+    justifyContent: "start",
+    gap: spacing.lg,
   },
-  pageTitle: {
-    gap: spacing.md,
-  },
+  pageTitle: { gap: spacing.sm },
   title: {
-    textAlign: "center",
+    textAlign: "left",
     fontWeight: "bold",
     fontSize: typography.size.xl,
   },
   subtitle: {
     color: colors.textSecondary,
-    textAlign: "center",
+    textAlign: "left",
     fontSize: typography.size.md,
   },
   inputContainer: {
