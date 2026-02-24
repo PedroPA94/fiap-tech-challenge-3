@@ -5,6 +5,7 @@ export const colors = {
   textSecondary: "#64728b",
   white: "#ffffff",
   border: "#e2e6eb",
+  error: "#d4183d"
 };
 
 export const spacing = {

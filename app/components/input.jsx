@@ -3,14 +3,20 @@ import { StyleSheet, TextInput, View } from "react-native";
 import { colors, radius, spacing, typography } from "../styles/theme";
 import Texto from "./texto";
 
-const Input = ({ label, icon, style, ...props }) => {
+const Input = ({ label, icon, style, erro = false, msgErro, ...props }) => {
   const [focused, setFocused] = useState(false);
+
+  const containerStyles = [
+    styles.inputContainer,
+    focused && !erro && styles.focused,
+    erro && styles.errorContainer,
+  ];
 
   return (
     <View>
       {label && <Texto style={styles.label}>{label}</Texto>}
 
-      <View style={[styles.inputContainer, focused && styles.focused]}>
+      <View style={containerStyles}>
         {icon && <View style={styles.icon}>{icon}</View>}
 
         <TextInput
@@ -21,6 +27,8 @@ const Input = ({ label, icon, style, ...props }) => {
           {...props}
         />
       </View>
+
+      {erro && msgErro && <Texto style={styles.errorText}>{msgErro}</Texto>}
     </View>
   );
 };
@@ -48,10 +56,20 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     borderWidth: 2,
   },
+  errorContainer: {
+    borderColor: colors.error,
+    borderWidth: 2,
+  },
   icon: {
     marginRight: spacing.sm,
   },
   input: {
     flex: 1,
+  },
+  errorText: {
+    marginTop: spacing.xs,
+    paddingLeft: spacing.xs,
+    fontSize: typography.size.xs,
+    color: colors.error,
   },
 });

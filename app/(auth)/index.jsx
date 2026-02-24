@@ -7,6 +7,8 @@ import Input from "../components/input";
 import Logo from "../components/logo";
 import Texto from "../components/texto";
 import { useFadeInUp } from "../hooks/useFadeInUp";
+import { useForm } from "../hooks/useForm";
+import { useValidators } from "../hooks/useValidators";
 import { colors, spacing, typography } from "../styles/theme";
 
 const LoginScreen = () => {
@@ -18,6 +20,29 @@ const LoginScreen = () => {
 
   const reanimatedStyleLogo = useFadeInUp();
   const reanimatedStyleInputs = useFadeInUp(500, 350);
+
+  const { validarEmail, validarTexto } = useValidators();
+
+  const validarLogin = () => {
+    const errors = {};
+
+    const erroEmail = validarEmail(values.email);
+    if (erroEmail) errors.email = erroEmail;
+
+    const erroSenha = validarTexto(values.senha, 6);
+    if (erroSenha) errors.senha = erroSenha;
+
+    return errors;
+  };
+
+  const { values, errors, handleChange, handleSubmit } = useForm(
+    { email: "", senha: "" },
+    validarLogin,
+  );
+
+  const entrar = () => {
+    console.log("Login válido");
+  };
 
   return (
     <View style={styles.container}>
@@ -31,22 +56,32 @@ const LoginScreen = () => {
 
       <Animated.View style={[styles.inputContainer, reanimatedStyleInputs]}>
         <Input
+          value={values.email}
+          onChangeText={(text) => handleChange("email", text)}
           label="Email"
           placeholder="exemplo@email.com"
           icon={<Ionicons name="mail-outline" size={20} color="#94A3B8" />}
           keyboardType="email-address"
           autoCapitalize="none"
+          erro={!!errors.email}
+          msgErro={errors.email}
+          textContentType="email"
         />
         <Input
+          value={values.senha}
+          onChangeText={(text) => handleChange("senha", text)}
           label="Senha"
           placeholder="••••••••"
           icon={
             <Ionicons name="lock-closed-outline" size={20} color="#94A3B8" />
           }
-          keyboardType="email-address"
           autoCapitalize="none"
+          erro={!!errors.senha}
+          msgErro={errors.senha}
+          textContentType="password"
+          secureTextEntry
         />
-        <Botao onPress={() => {}}>Entrar</Botao>
+        <Botao onPress={() => handleSubmit(entrar)}>Entrar</Botao>
         <Botao onPress={criarConta} secundario>
           Criar conta
         </Botao>

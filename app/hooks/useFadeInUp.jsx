@@ -29,5 +29,3 @@ export function useFadeInUp(durationOpacity = 500, durationTranslate = 250) {
 
   return reanimatedStyle;
 }
-
-export default useFadeInUp;

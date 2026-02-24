@@ -5,10 +5,34 @@ import Botao from "../components/botao";
 import Input from "../components/input";
 import Texto from "../components/texto";
 import { useFadeInUp } from "../hooks/useFadeInUp";
+import { useForm } from "../hooks/useForm";
+import { useValidators } from "../hooks/useValidators";
 import { colors, spacing, typography } from "../styles/theme";
 
 const Registro = () => {
   const reanimatedStyle = useFadeInUp();
+
+  const { validarEmail, validarTexto } = useValidators();
+
+  const validarRegistro = () => {
+    const errors = {};
+
+    const erroNome = validarTexto(values.nome, 3);
+    if (erroNome) errors.nome = erroNome;
+
+    const erroEmail = validarEmail(values.email);
+    if (erroEmail) errors.email = erroEmail;
+
+    const erroSenha = validarTexto(values.senha, 6);
+    if (erroSenha) errors.senha = erroSenha;
+
+    return errors;
+  };
+
+  const { values, errors, handleChange, handleSubmit } = useForm(
+    { email: "", senha: "" },
+    validarRegistro,
+  );
 
   return (
     <View style={styles.container}>
@@ -19,30 +43,45 @@ const Registro = () => {
         </Texto>
       </View>
 
-      <Animated.View style={[reanimatedStyle]}>
+      <Animated.View style={[styles.animatedContainer, reanimatedStyle]}>
         <View style={styles.inputContainer}>
           <Input
+            value={values.nome}
+            onChangeText={(text) => handleChange("nome", text)}
             label="Nome completo"
             placeholder="Seu nome"
             icon={<Ionicons name="person-outline" size={20} color="#94A3B8" />}
+            erro={!!errors.nome}
+            msgErro={errors.nome}
           />
           <Input
+            value={values.email}
+            onChangeText={(text) => handleChange("email", text)}
             label="Email"
             placeholder="exemplo@email.com"
             icon={<Ionicons name="mail-outline" size={20} color="#94A3B8" />}
             keyboardType="email-address"
             autoCapitalize="none"
+            erro={!!errors.email}
+            msgErro={errors.email}
+            textContentType="email"
           />
           <Input
+            value={values.senha}
+            onChangeText={(text) => handleChange("senha", text)}
             label="Senha"
             placeholder="••••••••"
             icon={
               <Ionicons name="lock-closed-outline" size={20} color="#94A3B8" />
             }
+            autoCapitalize="none"
+            erro={!!errors.senha}
+            msgErro={errors.senha}
+            textContentType="password"
             secureTextEntry
           />
         </View>
-        <Botao onPress={() => {}} style={{ marginTop: spacing.md }}>
+        <Botao onPress={() => handleSubmit()} style={{ marginTop: spacing.md }}>
           Cadastrar
         </Botao>
       </Animated.View>
