@@ -17,12 +17,12 @@ export function useForm(initialValues, validationFn) {
     }));
   };
 
-  const handleSubmit = (onValid) => {
+  const handleSubmit = (onValidFn) => {
     const validationErrors = validationFn(values);
     setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
-      onValid(values);
+    if (onValidFn && Object.keys(validationErrors).length === 0) {
+      onValidFn(values);
     }
   };
 

@@ -1,26 +1,26 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { colors, radius, shadow, spacing } from "../styles/theme";
-import Texto from "./texto";
+import Typography from "./typography";
 
-const Botao = ({ children, onPress, secundario, style }) => {
+const Button = ({ children, onPress, secondary, style }) => {
   return (
     <TouchableOpacity
       style={[
         style,
         styles.base,
-        secundario ? styles.secundario : styles.primario,
+        secondary ? styles.secondary : styles.primary,
       ]}
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <Texto style={secundario ? styles.textSecundario : styles.textPrimario}>
+      <Typography style={secondary ? styles.textSecondary : styles.textPrimary}>
         {children}
-      </Texto>
+      </Typography>
     </TouchableOpacity>
   );
 };
 
-export default Botao;
+export default Button;
 
 const styles = StyleSheet.create({
   base: {
@@ -29,19 +29,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  primario: {
+  primary: {
     backgroundColor: colors.primary,
     ...shadow,
   },
-  secundario: {
+  secondary: {
     backgroundColor: colors.background,
     borderWidth: 0,
   },
-  textPrimario: {
+  textPrimary: {
     color: colors.white,
     fontWeight: "bold",
   },
-  textSecundario: {
+  textSecondary: {
     color: colors.textSecondary,
     fontWeight: "bold",
   },

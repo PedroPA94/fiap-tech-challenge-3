@@ -10,7 +10,7 @@ export default function AuthLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen
-        name="registro"
+        name="register"
         options={{
           headerTitle: "",
           headerBackground: () => (

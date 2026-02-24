@@ -2,10 +2,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
-import Botao from "../components/botao";
+import Button from "../components/button";
 import Input from "../components/input";
 import Logo from "../components/logo";
-import Texto from "../components/texto";
+import Typography from "../components/typography";
 import { useFadeInUp } from "../hooks/useFadeInUp";
 import { useForm } from "../hooks/useForm";
 import { useValidators } from "../hooks/useValidators";
@@ -14,33 +14,33 @@ import { colors, spacing, typography } from "../styles/theme";
 const LoginScreen = () => {
   const router = useRouter();
 
-  const criarConta = () => {
-    router.navigate("/registro");
+  const register = () => {
+    router.navigate("/register");
   };
 
   const reanimatedStyleLogo = useFadeInUp();
   const reanimatedStyleInputs = useFadeInUp(500, 350);
 
-  const { validarEmail, validarTexto } = useValidators();
+  const { validateEmail, validateText } = useValidators();
 
-  const validarLogin = () => {
+  const validateLogin = () => {
     const errors = {};
 
-    const erroEmail = validarEmail(values.email);
-    if (erroEmail) errors.email = erroEmail;
+    const emailError = validateEmail(values.email);
+    if (emailError) errors.email = emailError;
 
-    const erroSenha = validarTexto(values.senha, 6);
-    if (erroSenha) errors.senha = erroSenha;
+    const passwordError = validateText(values.password, 6);
+    if (passwordError) errors.password = passwordError;
 
     return errors;
   };
 
   const { values, errors, handleChange, handleSubmit } = useForm(
-    { email: "", senha: "" },
-    validarLogin,
+    { email: "", password: "" },
+    validateLogin,
   );
 
-  const entrar = () => {
+  const login = () => {
     console.log("Login válido");
   };
 
@@ -49,8 +49,10 @@ const LoginScreen = () => {
       <Animated.View style={[styles.logoContainer, reanimatedStyleLogo]}>
         <Logo />
         <View style={styles.pageTitle}>
-          <Texto style={styles.title}>Bytebank</Texto>
-          <Texto style={styles.subtitle}>Você no controle do seu futuro</Texto>
+          <Typography style={styles.title}>Bytebank</Typography>
+          <Typography style={styles.subtitle}>
+            Você no controle do seu futuro
+          </Typography>
         </View>
       </Animated.View>
 
@@ -63,28 +65,28 @@ const LoginScreen = () => {
           icon={<Ionicons name="mail-outline" size={20} color="#94A3B8" />}
           keyboardType="email-address"
           autoCapitalize="none"
-          erro={!!errors.email}
-          msgErro={errors.email}
+          error={!!errors.email}
+          errorMsg={errors.email}
           textContentType="email"
         />
         <Input
-          value={values.senha}
-          onChangeText={(text) => handleChange("senha", text)}
+          value={values.password}
+          onChangeText={(text) => handleChange("password", text)}
           label="Senha"
           placeholder="••••••••"
           icon={
             <Ionicons name="lock-closed-outline" size={20} color="#94A3B8" />
           }
           autoCapitalize="none"
-          erro={!!errors.senha}
-          msgErro={errors.senha}
+          error={!!errors.password}
+          errorMsg={errors.password}
           textContentType="password"
           secureTextEntry
         />
-        <Botao onPress={() => handleSubmit(entrar)}>Entrar</Botao>
-        <Botao onPress={criarConta} secundario>
+        <Button onPress={() => handleSubmit(login)}>Entrar</Button>
+        <Button onPress={register} secondary>
           Criar conta
-        </Botao>
+        </Button>
       </Animated.View>
     </View>
   );

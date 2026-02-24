@@ -1,58 +1,58 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
-import Botao from "../components/botao";
+import Button from "../components/button";
 import Input from "../components/input";
-import Texto from "../components/texto";
+import Typography from "../components/typography";
 import { useFadeInUp } from "../hooks/useFadeInUp";
 import { useForm } from "../hooks/useForm";
 import { useValidators } from "../hooks/useValidators";
 import { colors, spacing, typography } from "../styles/theme";
 
-const Registro = () => {
+const Register = () => {
   const reanimatedStyle = useFadeInUp();
 
-  const { validarEmail, validarTexto } = useValidators();
+  const { validateEmail, validateText } = useValidators();
 
-  const validarRegistro = () => {
+  const validateRegister = () => {
     const errors = {};
 
-    const erroNome = validarTexto(values.nome, 3);
-    if (erroNome) errors.nome = erroNome;
+    const nameError = validateText(values.name, 3);
+    if (nameError) errors.name = nameError;
 
-    const erroEmail = validarEmail(values.email);
-    if (erroEmail) errors.email = erroEmail;
+    const emailError = validateEmail(values.email);
+    if (emailError) errors.email = emailError;
 
-    const erroSenha = validarTexto(values.senha, 6);
-    if (erroSenha) errors.senha = erroSenha;
+    const passwordError = validateText(values.password, 6);
+    if (passwordError) errors.password = passwordError;
 
     return errors;
   };
 
   const { values, errors, handleChange, handleSubmit } = useForm(
-    { email: "", senha: "" },
-    validarRegistro,
+    { name: "", email: "", password: "" },
+    validateRegister,
   );
 
   return (
     <View style={styles.container}>
       <View style={styles.pageTitle}>
-        <Texto style={styles.title}>Criar conta</Texto>
-        <Texto style={styles.subtitle}>
+        <Typography style={styles.title}>Criar conta</Typography>
+        <Typography style={styles.subtitle}>
           Comece a organizar sua vida financeira {"\n"}hoje mesmo!
-        </Texto>
+        </Typography>
       </View>
 
       <Animated.View style={[styles.animatedContainer, reanimatedStyle]}>
         <View style={styles.inputContainer}>
           <Input
-            value={values.nome}
-            onChangeText={(text) => handleChange("nome", text)}
+            value={values.name}
+            onChangeText={(text) => handleChange("name", text)}
             label="Nome completo"
             placeholder="Seu nome"
             icon={<Ionicons name="person-outline" size={20} color="#94A3B8" />}
-            erro={!!errors.nome}
-            msgErro={errors.nome}
+            error={!!errors.name}
+            errorMsg={errors.name}
           />
           <Input
             value={values.email}
@@ -62,34 +62,37 @@ const Registro = () => {
             icon={<Ionicons name="mail-outline" size={20} color="#94A3B8" />}
             keyboardType="email-address"
             autoCapitalize="none"
-            erro={!!errors.email}
-            msgErro={errors.email}
+            error={!!errors.email}
+            errorMsg={errors.email}
             textContentType="email"
           />
           <Input
-            value={values.senha}
-            onChangeText={(text) => handleChange("senha", text)}
+            value={values.password}
+            onChangeText={(text) => handleChange("password", text)}
             label="Senha"
             placeholder="••••••••"
             icon={
               <Ionicons name="lock-closed-outline" size={20} color="#94A3B8" />
             }
             autoCapitalize="none"
-            erro={!!errors.senha}
-            msgErro={errors.senha}
+            error={!!errors.password}
+            errorMsg={errors.password}
             textContentType="password"
             secureTextEntry
           />
         </View>
-        <Botao onPress={() => handleSubmit()} style={{ marginTop: spacing.md }}>
+        <Button
+          onPress={() => handleSubmit()}
+          style={{ marginTop: spacing.md }}
+        >
           Cadastrar
-        </Botao>
+        </Button>
       </Animated.View>
     </View>
   );
 };
 
-export default Registro;
+export default Register;
 
 const styles = StyleSheet.create({
   container: {

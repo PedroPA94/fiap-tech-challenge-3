@@ -1,7 +1,7 @@
 import { Text } from "react-native";
 import { colors, typography } from "../styles/theme";
 
-const Texto = ({ children, style }) => {
+const Typography = ({ children, style }) => {
   return (
     <Text
       style={{
@@ -19,4 +19,4 @@ const Texto = ({ children, style }) => {
   );
 };
 
-export default Texto;
+export default Typography;

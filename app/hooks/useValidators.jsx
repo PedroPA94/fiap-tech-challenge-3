@@ -1,13 +1,13 @@
 import { useCallback } from "react";
 
 export function useValidators() {
-  const campoObrigatorio = "Campo obrigatório";
+  const requiredField = "Campo obrigatório";
 
-  const validarEmail = useCallback((valor, obrigatorio = true) => {
-    const email = valor?.trim() ?? "";
+  const validateEmail = useCallback((value, required = true) => {
+    const email = value?.trim() ?? "";
 
-    if (obrigatorio && !email) {
-      return campoObrigatorio;
+    if (required && !email) {
+      return requiredField;
     }
 
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -17,11 +17,11 @@ export function useValidators() {
     return "";
   }, []);
 
-  const validarTexto = useCallback((valor, min = 1, obrigatorio = true) => {
-    const texto = valor?.trim() ?? "";
+  const validateText = useCallback((value, min = 1, required = true) => {
+    const texto = value?.trim() ?? "";
 
-    if (obrigatorio && !texto) {
-      return campoObrigatorio;
+    if (required && !texto) {
+      return requiredField;
     }
 
     if (texto && texto.length < min) {
@@ -32,7 +32,7 @@ export function useValidators() {
   }, []);
 
   return {
-    validarEmail,
-    validarTexto,
+    validateEmail,
+    validateText,
   };
 }
