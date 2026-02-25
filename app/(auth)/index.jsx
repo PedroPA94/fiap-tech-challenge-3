@@ -6,12 +6,13 @@ import Button from "../components/button";
 import Input from "../components/input";
 import Logo from "../components/logo";
 import Typography from "../components/typography";
+import { useAuth } from "../contexts/AuthContext";
 import { useFadeInUp } from "../hooks/useFadeInUp";
 import { useForm } from "../hooks/useForm";
 import { useValidators } from "../hooks/useValidators";
 import { colors, spacing, typography } from "../styles/theme";
 
-const LoginScreen = () => {
+const Login = () => {
   const router = useRouter();
 
   const register = () => {
@@ -40,8 +41,11 @@ const LoginScreen = () => {
     validateLogin,
   );
 
+  const { setLoggedIn } = useAuth();
+
   const login = () => {
     console.log("Login válido");
+    setLoggedIn(true);
   };
 
   return (
@@ -92,7 +96,7 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default Login;
 
 const styles = StyleSheet.create({
   container: {
