@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   errorContainer: {
-    borderColor: colors.error,
+    borderColor: colors.danger,
     borderWidth: 2,
   },
   icon: {
@@ -72,6 +72,6 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
     paddingLeft: spacing.xs,
     fontSize: typography.size.xs,
-    color: colors.error,
+    color: colors.danger,
   },
 });

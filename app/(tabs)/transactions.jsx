@@ -1,12 +1,7 @@
-import { View } from "react-native";
-import Typography from "../../components/typography";
+import TransactionsScreen from "../../screens/transactions";
 
 const Transactions = () => {
-  return (
-    <View>
-      <Typography>Transações!</Typography>
-    </View>
-  );
+  return <TransactionsScreen />;
 };
 
 export default Transactions;

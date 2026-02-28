@@ -7,8 +7,60 @@ export const colors = {
   white: "#ffffff",
   black: "#000000",
   border: "#e2e6eb",
-  error: "#d4183d"
+  danger: "#d4183d",
+  success: '#10b981'
 };
+
+export const categories = {
+    home: {
+      icon: 'home-sharp',
+      label: 'Casa',
+      baseColor:"#3ed9f5",
+      softColor: "#3ed9f520"
+    },
+    education: {
+      icon: 'school',
+      label: 'Educação',
+      baseColor: "#1c4fbe",
+      softColor: "#1c4fbe20"
+    },
+    transport: {
+      icon: 'car',
+      label: 'Transporte',
+      baseColor: "#b4b102",
+      softColor: "#b4b10220"
+    },
+    food: {
+      icon: 'restaurant',
+      label: 'Alimentação',
+      baseColor: "#d47406",
+      softColor: "#d4740620"
+    },
+    leisure: {
+      icon: 'happy',
+      label: 'Lazer',
+      baseColor: "#750bb3",
+      softColor: "#750bb320"
+    },
+    health: {
+      icon: 'medkit',
+      label: 'Saúde',
+      baseColor: "#f829b3",
+      softColor: "#f829b320"
+    },
+    other: {
+      icon: 'ellipsis-horizontal-circle',
+      label: 'Outros',
+      baseColor: "#696969",
+      softColor: "#69696920"
+    },
+    income: {
+      icon: 'logo-usd',
+      label: 'Receita',
+      baseColor: '#10b981',
+      softColor: '#10b98120',
+    }
+  }
 
 export const spacing = {
   xs: 4,

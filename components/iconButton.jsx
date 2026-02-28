@@ -42,14 +42,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     ...shadowNeutral,
   },
-  textPrimary: {
-    color: colors.white,
-    fontWeight: "bold",
-  },
-  textSecondary: {
-    color: colors.textSecondary,
-    fontWeight: "bold",
-  },
   round: {
     borderRadius: radius.lg,
   },

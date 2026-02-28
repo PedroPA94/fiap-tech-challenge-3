@@ -13,7 +13,10 @@ const Button = ({ children, onPress, secondary, style }) => {
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <Typography style={secondary ? styles.textSecondary : styles.textPrimary}>
+      <Typography
+        weight="bold"
+        style={secondary ? styles.textSecondary : styles.textPrimary}
+      >
         {children}
       </Typography>
     </TouchableOpacity>
@@ -39,10 +42,8 @@ const styles = StyleSheet.create({
   },
   textPrimary: {
     color: colors.white,
-    fontWeight: "bold",
   },
   textSecondary: {
     color: colors.textSecondary,
-    fontWeight: "bold",
   },
 });

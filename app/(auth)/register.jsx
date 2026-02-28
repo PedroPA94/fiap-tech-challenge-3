@@ -37,7 +37,9 @@ const Register = () => {
   return (
     <View style={styles.container}>
       <View style={styles.pageTitle}>
-        <Typography style={styles.title}>Criar conta</Typography>
+        <Typography weight="bold" style={styles.title}>
+          Criar conta
+        </Typography>
         <Typography style={styles.subtitle}>
           Comece a organizar sua vida financeira {"\n"}hoje mesmo!
         </Typography>
@@ -105,7 +107,6 @@ const styles = StyleSheet.create({
   pageTitle: { gap: spacing.sm },
   title: {
     textAlign: "left",
-    fontWeight: "bold",
     fontSize: typography.size.xl,
   },
   subtitle: {

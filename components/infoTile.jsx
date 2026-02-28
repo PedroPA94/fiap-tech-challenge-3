@@ -4,61 +4,53 @@ import { colors, spacing, typography } from "../styles/theme";
 import Typography from "./typography";
 
 const InfoTile = ({
-  icon,
-  label,
+  category,
   value,
   tone = "dark",
-  iconVariant = "primary",
+  reversed = false,
   style,
 }) => {
   const toneMap = {
     light: {
-      textColor: colors.black,
+      labelColor: colors.textSecondary,
+      valueColor: colors.textPrimary,
     },
     dark: {
-      textColor: colors.white,
+      labelColor: colors.white,
+      valueColor: colors.white,
     },
   };
 
   const selectedTone = toneMap[tone] ?? toneMap.dark;
-  const labelStyle = { ...styles.label, color: selectedTone.textColor };
-  const valueStyle = { ...styles.value, color: selectedTone.textColor };
 
-  const iconVariantMap = {
-    primary: {
-      iconColor: colors.white,
-      background: colors.primarySoft,
-    },
-    secondary: {
-      iconColor: colors.secondary,
-      background: colors.secondarySoft,
-    },
-    success: {
-      iconColor: colors.success,
-      background: colors.successSoft,
-    },
-    danger: {
-      iconColor: colors.danger,
-      background: colors.dangerSoft,
-    },
-  };
+  const first = reversed ? value : category.label;
+  const second = reversed ? category.label : value;
 
-  const selectedVariant = iconVariantMap[iconVariant] ?? iconVariantMap.primary;
+  const firstStyle = reversed
+    ? [styles.value, { color: selectedTone.valueColor }]
+    : [styles.label, { color: selectedTone.labelColor }];
+  const firstWeight = reversed ? "bold" : "regular";
+
+  const secondStyle = reversed
+    ? [styles.label, { color: selectedTone.labelColor }]
+    : [styles.value, { color: selectedTone.valueColor }];
+  const secondWeight = reversed ? "regular" : "bold";
 
   return (
     <View style={[styles.container, style]}>
       <View
-        style={[
-          styles.iconWrapper,
-          { backgroundColor: selectedVariant.background },
-        ]}
+        style={[styles.iconWrapper, { backgroundColor: category.softColor }]}
       >
-        <Ionicons name={icon} size={25} color={selectedVariant.iconColor} />
+        <Ionicons name={category.icon} size={25} color={category.baseColor} />
       </View>
 
       <View style={styles.textWrapper}>
-        <Typography style={labelStyle}>{label}</Typography>
-        <Typography style={valueStyle}>{value}</Typography>
+        <Typography weight={firstWeight} style={firstStyle}>
+          {first}
+        </Typography>
+        <Typography weight={secondWeight} style={secondStyle}>
+          {second}
+        </Typography>
       </View>
     </View>
   );
@@ -81,6 +73,7 @@ const styles = StyleSheet.create({
   },
   textWrapper: {
     flex: 1,
+    gap: spacing.xs,
   },
   label: {
     fontSize: typography.size.xxs,
@@ -89,7 +82,5 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: typography.size.sm,
-    fontWeight: "bold",
-    marginTop: spacing.xs,
   },
 });

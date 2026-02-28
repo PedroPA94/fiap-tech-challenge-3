@@ -53,7 +53,9 @@ const Login = () => {
       <Animated.View style={[styles.logoContainer, reanimatedStyleLogo]}>
         <Logo />
         <View style={styles.pageTitle}>
-          <Typography style={styles.title}>Bytebank</Typography>
+          <Typography weight="bold" style={styles.title}>
+            Bytebank
+          </Typography>
           <Typography style={styles.subtitle}>
             Você no controle do seu futuro
           </Typography>
@@ -116,7 +118,6 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontWeight: "bold",
     fontSize: typography.size.xl,
   },
   subtitle: {

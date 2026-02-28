@@ -12,7 +12,9 @@ const Header = () => {
         <Ionicons name="person-circle" color={colors.primary} size={60} />
         <View>
           <Typography style={styles.subtitle}>Boas-vindas,</Typography>
-          <Typography style={styles.title}>Pedro</Typography>
+          <Typography weight="bold" style={styles.title}>
+            Pedro
+          </Typography>
         </View>
       </View>
       <IconButton
@@ -39,12 +41,10 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "start",
-    fontWeight: "bold",
     fontSize: typography.size.xl,
   },
   subtitle: {
     textAlign: "start",
-    fontWeight: "regular",
     fontSize: typography.size.xs,
     color: colors.textSecondary,
   },

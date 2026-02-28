@@ -10,19 +10,29 @@ const Balance = () => {
     <Card kind="primary" style={styles.container}>
       <View style={styles.balanceWrapper}>
         <Typography style={styles.balanceLabel}>Saldo total</Typography>
-        <Typography style={styles.balanceValue}>R$ 4.634,10</Typography>
+        <Typography weight="bold" style={styles.balanceValue}>
+          R$ 4.634,10
+        </Typography>
       </View>
       <View style={styles.infoWrapper}>
         <InfoTile
-          icon="arrow-down-circle-outline"
-          label="Receitas"
           value="R$ 5.000,00"
+          category={{
+            icon: "arrow-down-circle-outline",
+            label: "Receitas",
+            baseColor: colors.white,
+            softColor: colors.primarySoft,
+          }}
         />
 
         <InfoTile
-          icon="arrow-up-circle-outline"
-          label="Despesas"
           value="R$ 365,90"
+          category={{
+            icon: "arrow-up-circle-outline",
+            label: "Despesas",
+            baseColor: colors.white,
+            softColor: colors.primarySoft,
+          }}
         />
       </View>
     </Card>
@@ -45,7 +55,6 @@ const styles = StyleSheet.create({
   balanceValue: {
     color: colors.white,
     fontSize: typography.size.xl,
-    fontWeight: "bold",
   },
   infoWrapper: {
     flexDirection: "row",
