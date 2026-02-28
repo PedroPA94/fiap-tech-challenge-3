@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "start",
     fontWeight: "bold",
-    fontSize: typography.size.lg,
+    fontSize: typography.size.xl,
   },
   subtitle: {
     textAlign: "start",

@@ -1,5 +1,6 @@
 export const colors = {
   primary: "#2563eb",
+  primarySoft: "#FFFFFF20",
   background: "#f8fafc",
   textPrimary: "#0f172a",
   textSecondary: "#64728b",
@@ -31,6 +32,7 @@ export const typography = {
     semibold: "Inter_600SemiBold",
   },
   size: {
+    xxs: 10,
     xs: 12,
     sm: 14,
     md: 16,
