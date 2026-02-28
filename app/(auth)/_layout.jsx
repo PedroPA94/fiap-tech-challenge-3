@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useRouter } from "expo-router";
 import { TouchableOpacity, View } from "react-native";
-import { colors } from "../styles/theme";
+import { colors } from "../../styles/theme";
 
 export default function AuthLayout() {
   const router = useRouter();

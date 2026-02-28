@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import Typography from "../components/typography";
+import Typography from "../../components/typography";
 
 const Transactions = () => {
   return (

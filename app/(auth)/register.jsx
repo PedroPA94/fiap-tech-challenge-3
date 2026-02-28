@@ -1,13 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
-import Button from "../components/button";
-import Input from "../components/input";
-import Typography from "../components/typography";
-import { useFadeInUp } from "../hooks/useFadeInUp";
-import { useForm } from "../hooks/useForm";
-import { useValidators } from "../hooks/useValidators";
-import { colors, spacing, typography } from "../styles/theme";
+import Button from "../../components/button";
+import Input from "../../components/input";
+import Typography from "../../components/typography";
+import { useFadeInUp } from "../../hooks/useFadeInUp";
+import { useForm } from "../../hooks/useForm";
+import { useValidators } from "../../hooks/useValidators";
+import { colors, spacing, typography } from "../../styles/theme";
 
 const Register = () => {
   const reanimatedStyle = useFadeInUp();

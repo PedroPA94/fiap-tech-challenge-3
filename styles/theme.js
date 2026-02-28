@@ -4,6 +4,7 @@ export const colors = {
   textPrimary: "#0f172a",
   textSecondary: "#64728b",
   white: "#ffffff",
+  black: "#000000",
   border: "#e2e6eb",
   error: "#d4183d"
 };
@@ -21,6 +22,7 @@ export const radius = {
   none: 0,
   sm: 8,
   md: 16,
+  lg: 24
 };
 
 export const typography = {
@@ -43,4 +45,10 @@ export const shadow = {
   shadowOpacity: 0.65,
   shadowRadius: 12,
   elevation: 6,
+};
+
+export const shadowNeutral = {
+  ...shadow,
+  shadowColor: colors.black,
+  shadowOpacity: 0.15
 };

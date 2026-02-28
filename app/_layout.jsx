@@ -4,7 +4,7 @@ import {
   useFonts,
 } from "@expo-google-fonts/inter";
 import { Stack } from "expo-router";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "../contexts/AuthContext";
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({

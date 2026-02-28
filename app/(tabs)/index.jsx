@@ -1,12 +1,7 @@
-import { View } from "react-native-web";
-import Typography from "../components/typography";
+import DashboardScreen from "../../screens/dashboard";
 
 const Dashboard = () => {
-  return (
-    <View>
-      <Typography>Olá!</Typography>
-    </View>
-  );
+  return <DashboardScreen />;
 };
 
 export default Dashboard;

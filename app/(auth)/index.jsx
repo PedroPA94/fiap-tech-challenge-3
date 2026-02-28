@@ -2,15 +2,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
-import Button from "../components/button";
-import Input from "../components/input";
-import Logo from "../components/logo";
-import Typography from "../components/typography";
-import { useAuth } from "../contexts/AuthContext";
-import { useFadeInUp } from "../hooks/useFadeInUp";
-import { useForm } from "../hooks/useForm";
-import { useValidators } from "../hooks/useValidators";
-import { colors, spacing, typography } from "../styles/theme";
+import Button from "../../components/button";
+import Input from "../../components/input";
+import Logo from "../../components/logo";
+import Typography from "../../components/typography";
+import { useAuth } from "../../contexts/AuthContext";
+import { useFadeInUp } from "../../hooks/useFadeInUp";
+import { useForm } from "../../hooks/useForm";
+import { useValidators } from "../../hooks/useValidators";
+import { colors, spacing, typography } from "../../styles/theme";
 
 const Login = () => {
   const router = useRouter();
