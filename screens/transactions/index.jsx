@@ -1,11 +1,17 @@
+import { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import Typography from "../../components/typography";
 import { useFadeInRight } from "../../hooks/useFadeInRight";
 import { spacing, typography } from "../../styles/theme";
 import TransactionItem from "./components/transactionItem";
+import TransactionsFilter from "./components/transactionsFilter";
 
 const TransactionsScreen = () => {
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+
   const transactions = [
     {
       value: 5000,
@@ -75,7 +81,35 @@ const TransactionsScreen = () => {
     return {
       ...t,
       date: new Intl.DateTimeFormat("pt-BR").format(date),
+      originalDate: t.date,
     };
+  });
+
+  const filteredTransactions = formattedTransactions.filter((transaction) => {
+    if (selectedCategory && transaction.category !== selectedCategory) {
+      return false;
+    }
+
+    if (selectedDate) {
+      const [day, month, year] = selectedDate.split("/");
+      const searchDate = `${year}-${month}-${day}`;
+      const transactionDate = new Date(transaction.originalDate)
+        .toISOString()
+        .split("T")[0];
+
+      if (transactionDate !== searchDate) return false;
+    }
+
+    if (search.trim()) {
+      const query = search.toLowerCase().trim();
+      const descriptionMatch = transaction.description
+        .toLowerCase()
+        .includes(query);
+
+      return descriptionMatch;
+    }
+
+    return true;
   });
 
   return (
@@ -83,14 +117,27 @@ const TransactionsScreen = () => {
       <Typography weight="bold" style={styles.title}>
         Transações
       </Typography>
+
       <View style={styles.transactionsWrapper}>
         <FlatList
-          data={formattedTransactions}
+          ListHeaderComponent={
+            <View style={{ marginBottom: spacing.lg }}>
+              <TransactionsFilter
+                search={search}
+                onSearchChange={setSearch}
+                selectedCategory={selectedCategory}
+                onCategoryChange={setSelectedCategory}
+                selectedDate={selectedDate}
+                onDateChange={setSelectedDate}
+              />
+            </View>
+          }
+          data={filteredTransactions}
           keyExtractor={(item) => item.date}
           renderItem={({ item, index }) => (
             <AnimatedTransactionItem item={item} index={index} />
           )}
-          ItemSeparatorComponent={() => <View style={{ height: spacing.md }} />}
+          ItemSeparatorComponent={<View style={{ height: spacing.md }} />}
           contentContainerStyle={{
             paddingHorizontal: spacing.sm,
             paddingVertical: spacing.md,
@@ -107,7 +154,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: spacing.lg,
-    gap: spacing.xl,
+    gap: spacing.md,
   },
   title: {
     fontSize: typography.size.lg,
