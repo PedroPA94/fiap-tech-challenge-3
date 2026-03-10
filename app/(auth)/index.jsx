@@ -20,7 +20,7 @@ const Login = () => {
   };
 
   const reanimatedStyleLogo = useFadeInUp();
-  const reanimatedStyleInputs = useFadeInUp(500, 350);
+  const reanimatedStyleInputs = useFadeInUp({ delay: 200 });
 
   const { validateEmail, validateText } = useValidators();
 

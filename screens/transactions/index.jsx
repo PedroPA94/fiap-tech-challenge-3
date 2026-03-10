@@ -1,5 +1,7 @@
 import { FlatList, StyleSheet, View } from "react-native";
+import Animated from "react-native-reanimated";
 import Typography from "../../components/typography";
+import { useFadeInRight } from "../../hooks/useFadeInRight";
 import { spacing, typography } from "../../styles/theme";
 import TransactionItem from "./components/transactionItem";
 
@@ -85,13 +87,8 @@ const TransactionsScreen = () => {
         <FlatList
           data={formattedTransactions}
           keyExtractor={(item) => item.date}
-          renderItem={({ item }) => (
-            <TransactionItem
-              category={item.category}
-              value={item.value}
-              description={item.description}
-              date={item.date}
-            />
+          renderItem={({ item, index }) => (
+            <AnimatedTransactionItem item={item} index={index} />
           )}
           ItemSeparatorComponent={() => <View style={{ height: spacing.md }} />}
           contentContainerStyle={{
@@ -119,3 +116,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+const AnimatedTransactionItem = ({ item, index }) => {
+  const animatedStyle = useFadeInRight(index);
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <TransactionItem
+        category={item.category}
+        value={item.value}
+        description={item.description}
+        date={item.date}
+      />
+    </Animated.View>
+  );
+};

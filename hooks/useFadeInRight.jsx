@@ -8,26 +8,26 @@ import {
   withTiming,
 } from "react-native-reanimated";
 
-export function useFadeInUp({ delay = 0, duration = 350, distance = 20 } = {}) {
+export function useFadeInRight(index = 0) {
   const opacity = useSharedValue(0);
-  const translate = useSharedValue(distance);
-  const scale = useSharedValue(0.98);
+  const translate = useSharedValue(-20);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
-    transform: [{ translateY: translate.value }, { scale: scale.value }],
+    transform: [{ translateX: translate.value }],
   }));
 
   useFocusEffect(
     useCallback(() => {
+      const delay = index * 40;
+
       opacity.value = 0;
-      translate.value = distance;
-      scale.value = 0.98;
+      translate.value = -20;
 
       opacity.value = withDelay(
         delay,
         withTiming(1, {
-          duration,
+          duration: 350,
           easing: Easing.out(Easing.cubic),
         }),
       );
@@ -35,19 +35,11 @@ export function useFadeInUp({ delay = 0, duration = 350, distance = 20 } = {}) {
       translate.value = withDelay(
         delay,
         withTiming(0, {
-          duration,
+          duration: 250,
           easing: Easing.out(Easing.cubic),
         }),
       );
-
-      scale.value = withDelay(
-        delay,
-        withTiming(1, {
-          duration,
-          easing: Easing.out(Easing.cubic),
-        }),
-      );
-    }, [delay, duration, distance]),
+    }, [index]),
   );
 
   return animatedStyle;
