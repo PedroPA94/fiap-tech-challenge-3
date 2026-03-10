@@ -27,6 +27,7 @@ const TransactionItem = ({ value, date, description, category }) => {
         tone="light"
         category={categoryData}
         reversed
+        style={styles.infoTile}
       />
 
       <View style={styles.inner}>
@@ -47,6 +48,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  infoTile: {
+    flex: 1,
+    flexShrink: 1,
   },
   inner: {
     alignItems: "flex-end",

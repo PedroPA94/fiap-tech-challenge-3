@@ -4,6 +4,9 @@ import {
   useFonts,
 } from "@expo-google-fonts/inter";
 import { Stack } from "expo-router";
+import { StyleSheet } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+
 import { AuthProvider, useAuth } from "../contexts/AuthContext";
 
 export default function RootLayout() {
@@ -17,9 +20,11 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <RootNavigation />
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <RootNavigation />
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }
 
@@ -27,14 +32,22 @@ function RootNavigation() {
   const { loggedIn } = useAuth();
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={loggedIn}>
-        <Stack.Screen name="(tabs)" />
-      </Stack.Protected>
+    <SafeAreaView style={styles.container}>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Protected guard={loggedIn}>
+          <Stack.Screen name="(tabs)" />
+        </Stack.Protected>
 
-      <Stack.Protected guard={!loggedIn}>
-        <Stack.Screen name="(auth)" />
-      </Stack.Protected>
-    </Stack>
+        <Stack.Protected guard={!loggedIn}>
+          <Stack.Screen name="(auth)" />
+        </Stack.Protected>
+      </Stack>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
