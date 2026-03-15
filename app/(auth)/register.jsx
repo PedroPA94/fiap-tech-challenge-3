@@ -1,17 +1,15 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { FadeInDown } from "react-native-reanimated";
 import Button from "../../components/button";
 import Input from "../../components/input";
 import Typography from "../../components/typography";
-import { useFadeInUp } from "../../hooks/useFadeInUp";
 import { useForm } from "../../hooks/useForm";
 import { useValidators } from "../../hooks/useValidators";
 import { colors, spacing, typography } from "../../styles/theme";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Register = () => {
-  const reanimatedStyle = useFadeInUp();
-
   const { validateEmail, validateText } = useValidators();
 
   const validateRegister = () => {
@@ -35,7 +33,7 @@ const Register = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.pageTitle}>
         <Typography weight="bold" style={styles.title}>
           Criar conta
@@ -45,7 +43,10 @@ const Register = () => {
         </Typography>
       </View>
 
-      <Animated.View style={[styles.animatedContainer, reanimatedStyle]}>
+      <Animated.View
+        style={styles.animatedContainer}
+        entering={FadeInDown.duration(350).springify()}
+      >
         <View style={styles.inputContainer}>
           <Input
             value={values.name}
@@ -90,7 +91,7 @@ const Register = () => {
           Cadastrar
         </Button>
       </Animated.View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    padding: spacing.lg,
+    paddingHorizontal: spacing.lg,
     justifyContent: "start",
     gap: spacing.lg,
   },

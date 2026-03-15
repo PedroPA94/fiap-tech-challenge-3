@@ -4,8 +4,7 @@ import {
   useFonts,
 } from "@expo-google-fonts/inter";
 import { Stack } from "expo-router";
-import { StyleSheet } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AuthProvider, useAuth } from "../contexts/AuthContext";
 
@@ -32,22 +31,14 @@ function RootNavigation() {
   const { loggedIn } = useAuth();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Protected guard={loggedIn}>
-          <Stack.Screen name="(tabs)" />
-        </Stack.Protected>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Protected guard={loggedIn}>
+        <Stack.Screen name="(tabs)" />
+      </Stack.Protected>
 
-        <Stack.Protected guard={!loggedIn}>
-          <Stack.Screen name="(auth)" />
-        </Stack.Protected>
-      </Stack>
-    </SafeAreaView>
+      <Stack.Protected guard={!loggedIn}>
+        <Stack.Screen name="(auth)" />
+      </Stack.Protected>
+    </Stack>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

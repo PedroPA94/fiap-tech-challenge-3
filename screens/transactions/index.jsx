@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { Easing, FadeInLeft } from "react-native-reanimated";
 import Typography from "../../components/typography";
-import { useFadeInRight } from "../../hooks/useFadeInRight";
 import { spacing, typography } from "../../styles/theme";
 import TransactionItem from "./components/transactionItem";
 import TransactionsFilter from "./components/transactionsFilter";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const TransactionsScreen = () => {
   const [search, setSearch] = useState("");
@@ -113,7 +113,7 @@ const TransactionsScreen = () => {
   });
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["top"]}>
       <Typography weight="bold" style={styles.title}>
         Transações
       </Typography>
@@ -144,7 +144,7 @@ const TransactionsScreen = () => {
           }}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -153,7 +153,8 @@ export default TransactionsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: spacing.lg,
+    paddingTop: spacing.md,
+    paddingHorizontal: spacing.lg,
     gap: spacing.md,
   },
   title: {
@@ -165,10 +166,13 @@ const styles = StyleSheet.create({
 });
 
 const AnimatedTransactionItem = ({ item, index }) => {
-  const animatedStyle = useFadeInRight(index);
-
   return (
-    <Animated.View style={animatedStyle}>
+    <Animated.View
+      collapsable={false}
+      entering={FadeInLeft.delay(index * 50)
+        .duration(320)
+        .easing(Easing.out(Easing.cubic))}
+    >
       <TransactionItem
         category={item.category}
         value={item.value}

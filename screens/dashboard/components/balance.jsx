@@ -43,6 +43,7 @@ export default Balance;
 const styles = StyleSheet.create({
   container: {
     gap: spacing.xl,
+    paddingHorizontal: spacing.md,
   },
   balanceWrapper: {
     gap: spacing.sm,

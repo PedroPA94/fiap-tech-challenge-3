@@ -36,7 +36,10 @@ const TransactionsFilter = ({
   const handleDateSelect = (event, date) => {
     setShowDatePicker(false);
 
-    if (!date) return;
+    if (!date || event.type === "dismissed") {
+      clearDate();
+      return;
+    }
 
     const formatted =
       String(date.getDate()).padStart(2, "0") +
@@ -82,7 +85,7 @@ const TransactionsFilter = ({
             <TouchableOpacity style={styles.clearButton} onPress={clearDate}>
               <Ionicons
                 name="close-circle"
-                size={20}
+                size={30}
                 color={colors.textSecondary}
               />
             </TouchableOpacity>
@@ -213,7 +216,7 @@ const styles = StyleSheet.create({
   clearButton: {
     position: "absolute",
     right: spacing.md,
-    top: "50%",
+    top: "40%",
     transform: [{ translateY: -10 }],
   },
 });

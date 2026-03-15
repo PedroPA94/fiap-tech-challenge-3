@@ -1,11 +1,5 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import {
-  colors,
-  radius,
-  shadow,
-  shadowNeutral,
-  spacing,
-} from "../styles/theme";
+import { colors, radius, spacing } from "../styles/theme";
 
 const IconButton = ({ icon, onPress, secondary, round, style }) => {
   return (
@@ -28,19 +22,16 @@ export default IconButton;
 
 const styles = StyleSheet.create({
   base: {
-    padding: spacing.md,
     justifyContent: "center",
     alignItems: "center",
-    maxHeight: spacing.xxl,
-    maxWidth: spacing.xxl,
+    height: spacing.xxl,
+    width: spacing.xxl,
   },
   primary: {
     backgroundColor: colors.primary,
-    ...shadow,
   },
   secondary: {
     backgroundColor: colors.white,
-    ...shadowNeutral,
   },
   round: {
     borderRadius: radius.lg,

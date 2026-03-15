@@ -1,20 +1,18 @@
-import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
-import { useFadeInUp } from "../../hooks/useFadeInUp";
+import { StyleSheet } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
 import { spacing } from "../../styles/theme";
 import Balance from "./components/balance";
 import Header from "./components/header";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const DashboardScreen = () => {
-  const reanimatedStyle = useFadeInUp();
-
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header />
-      <Animated.View style={reanimatedStyle}>
+      <Animated.View entering={FadeInDown.delay(200).duration(350).springify()}>
         <Balance />
       </Animated.View>
-    </View>
+    </SafeAreaView>
   );
 };
 

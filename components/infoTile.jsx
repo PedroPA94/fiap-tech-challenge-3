@@ -63,6 +63,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
+    flex: 1,
+    flexShrink: 1,
   },
   iconWrapper: {
     width: 40,

@@ -5,7 +5,10 @@ import IconButton from "../../../components/iconButton";
 import Typography from "../../../components/typography";
 import { colors, spacing, typography } from "../../../styles/theme";
 
+import { useAuth } from "../../../contexts/AuthContext";
+
 const Header = () => {
+  const { setLoggedIn } = useAuth();
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
@@ -20,6 +23,7 @@ const Header = () => {
       <IconButton
         icon={<Ionicons name="log-out-outline" size={25} color="#94A3B8" />}
         secondary
+        onPress={() => setLoggedIn(false)}
       />
     </View>
   );

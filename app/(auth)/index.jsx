@@ -1,16 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { FadeInDown } from "react-native-reanimated";
 import Button from "../../components/button";
 import Input from "../../components/input";
 import Logo from "../../components/logo";
 import Typography from "../../components/typography";
 import { useAuth } from "../../contexts/AuthContext";
-import { useFadeInUp } from "../../hooks/useFadeInUp";
 import { useForm } from "../../hooks/useForm";
 import { useValidators } from "../../hooks/useValidators";
 import { colors, spacing, typography } from "../../styles/theme";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Login = () => {
   const router = useRouter();
@@ -18,9 +18,6 @@ const Login = () => {
   const register = () => {
     router.navigate("/register");
   };
-
-  const reanimatedStyleLogo = useFadeInUp();
-  const reanimatedStyleInputs = useFadeInUp({ delay: 200 });
 
   const { validateEmail, validateText } = useValidators();
 
@@ -49,8 +46,11 @@ const Login = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Animated.View style={[styles.logoContainer, reanimatedStyleLogo]}>
+    <SafeAreaView style={styles.container}>
+      <Animated.View
+        style={styles.logoContainer}
+        entering={FadeInDown.duration(350).springify()}
+      >
         <Logo />
         <View style={styles.pageTitle}>
           <Typography weight="bold" style={styles.title}>
@@ -62,7 +62,10 @@ const Login = () => {
         </View>
       </Animated.View>
 
-      <Animated.View style={[styles.inputContainer, reanimatedStyleInputs]}>
+      <Animated.View
+        style={styles.inputContainer}
+        entering={FadeInDown.delay(200).duration(350).springify()}
+      >
         <Input
           value={values.email}
           onChangeText={(text) => handleChange("email", text)}
@@ -94,7 +97,7 @@ const Login = () => {
           Criar conta
         </Button>
       </Animated.View>
-    </View>
+    </SafeAreaView>
   );
 };
 

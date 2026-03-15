@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { colors, radius, shadowNeutral, spacing } from "../styles/theme";
+import { colors, radius, spacing } from "../styles/theme";
 
 const Card = ({ children, kind = "neutral", style }) => {
   return (
@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: radius.lg,
     padding: spacing.lg,
-    ...shadowNeutral,
   },
   primary: {
     backgroundColor: colors.primary,

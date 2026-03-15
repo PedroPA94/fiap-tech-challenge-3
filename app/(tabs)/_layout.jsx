@@ -10,13 +10,6 @@ export default function TabsLayout() {
         tabBarActiveTintColor: colors.primary,
         tabBarStyle: {
           backgroundColor: colors.white,
-          borderTopWidth: 0,
-          elevation: 8,
-          shadowColor: colors.textPrimary,
-          shadowOffset: { width: 0, height: -4 },
-          shadowOpacity: 0.05,
-          shadowRadius: 8,
-          height: 70,
         },
       }}
     >
