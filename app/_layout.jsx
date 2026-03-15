@@ -34,6 +34,14 @@ function RootNavigation() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Protected guard={loggedIn}>
         <Stack.Screen name="(tabs)" />
+
+        <Stack.Screen
+          name="(modals)/transaction"
+          options={{
+            presentation: "modal",
+            headerShown: false,
+          }}
+        />
       </Stack.Protected>
 
       <Stack.Protected guard={!loggedIn}>

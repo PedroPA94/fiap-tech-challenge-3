@@ -6,6 +6,7 @@ import { spacing, typography } from "../../styles/theme";
 import TransactionItem from "./components/transactionItem";
 import TransactionsFilter from "./components/transactionsFilter";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 
 const TransactionsScreen = () => {
   const [search, setSearch] = useState("");
@@ -18,60 +19,70 @@ const TransactionsScreen = () => {
       date: "2026-02-28T16:00:00",
       category: "income",
       description: "Salário",
+      id: 1,
     },
     {
       value: -1200,
       date: "2026-02-27T09:30:00",
       category: "home",
       description: "Aluguel",
+      id: 2,
     },
     {
       value: -350,
       date: "2026-02-26T14:10:00",
       category: "food",
       description: "Supermercado",
+      id: 3,
     },
     {
       value: -89.9,
       date: "2026-02-25T19:45:00",
       category: "leisure",
       description: "Cinema",
+      id: 4,
     },
     {
       value: -60,
       date: "2026-02-24T08:20:00",
       category: "transport",
       description: "Uber",
+      id: 5,
     },
     {
       value: -220,
       date: "2026-02-23T11:00:00",
       category: "health",
       description: "Consulta médica",
+      id: 6,
     },
     {
       value: -480,
       date: "2026-02-20T18:15:00",
       category: "education",
       description: "Curso online",
+      id: 7,
     },
     {
       value: -150,
       date: "2026-01-30T13:40:00",
       category: "food",
       description: "Restaurante",
+      id: 8,
     },
     {
       value: 800,
       date: "2026-01-28T10:00:00",
       category: "income",
       description: "Freelance",
+      id: 9,
     },
     {
       value: -95,
       date: "2026-01-26T17:25:00",
       category: "other",
       description: "Compras diversas",
+      id: 10,
     },
   ];
 
@@ -112,6 +123,12 @@ const TransactionsScreen = () => {
     return true;
   });
 
+  const router = useRouter();
+
+  const editTransaction = (id) => {
+    router.push("(modals)/transaction?id=" + id);
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <Typography weight="bold" style={styles.title}>
@@ -133,9 +150,13 @@ const TransactionsScreen = () => {
             </View>
           }
           data={filteredTransactions}
-          keyExtractor={(item) => item.date}
+          keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => (
-            <AnimatedTransactionItem item={item} index={index} />
+            <AnimatedTransactionItem
+              item={item}
+              index={index}
+              editTransaction={editTransaction}
+            />
           )}
           ItemSeparatorComponent={<View style={{ height: spacing.md }} />}
           contentContainerStyle={{
@@ -165,7 +186,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const AnimatedTransactionItem = ({ item, index }) => {
+const AnimatedTransactionItem = ({ item, index, editTransaction }) => {
   return (
     <Animated.View
       collapsable={false}
@@ -178,6 +199,7 @@ const AnimatedTransactionItem = ({ item, index }) => {
         value={item.value}
         description={item.description}
         date={item.date}
+        onPress={() => editTransaction(item.id)}
       />
     </Animated.View>
   );

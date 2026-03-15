@@ -2,9 +2,10 @@ import { StyleSheet, View } from "react-native";
 import Card from "../../../components/card";
 import InfoTile from "../../../components/infoTile";
 import Typography from "../../../components/typography";
-import { categories, colors, typography } from "../../../styles/theme";
+import { categories, colors, spacing, typography } from "../../../styles/theme";
+import { Ionicons } from "@expo/vector-icons";
 
-const TransactionItem = ({ value, date, description, category }) => {
+const TransactionItem = ({ value, date, description, category, onPress }) => {
   const categoryData = categories[category] ?? categories.other;
 
   const isNegative = value < 0;
@@ -36,6 +37,14 @@ const TransactionItem = ({ value, date, description, category }) => {
           {displayValue}
         </Typography>
       </View>
+
+      <Ionicons
+        name="chevron-forward"
+        size={20}
+        color="grey"
+        style={styles.chevron}
+        onPress={onPress}
+      />
     </Card>
   );
 };
@@ -47,12 +56,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    position: "relative",
   },
   inner: {
     alignItems: "flex-end",
+    paddingEnd: spacing.xs,
   },
   date: {
     color: colors.textSecondary,
     fontSize: typography.size.xs,
+  },
+  chevron: {
+    position: "absolute",
+    right: 6,
   },
 });
