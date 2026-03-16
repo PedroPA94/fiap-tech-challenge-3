@@ -31,8 +31,21 @@ export function useValidators() {
     return "";
   }, []);
 
+  const validateValue = useCallback((value, required = true) => {
+    if (required && !value?.trim()) {
+      return "Valor obrigatório";
+    }
+
+    if (value && isNaN(parseFloat(value))) {
+      return "Insira um valor numérico válido";
+    }
+
+    return "";
+  }, []);
+
   return {
     validateEmail,
     validateText,
+    validateValue,
   };
 }
