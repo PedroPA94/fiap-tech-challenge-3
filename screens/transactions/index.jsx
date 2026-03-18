@@ -1,91 +1,27 @@
-import { useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { useState, useEffect } from "react";
+import { FlatList, StyleSheet, View, ActivityIndicator } from "react-native";
 import Animated, { Easing, FadeInLeft } from "react-native-reanimated";
 import Typography from "../../components/typography";
-import { spacing, typography } from "../../styles/theme";
+import { spacing, typography, colors } from "../../styles/theme";
 import TransactionItem from "./components/transactionItem";
 import TransactionsFilter from "./components/transactionsFilter";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { useTransactions } from "../../contexts/TransactionsContext";
 
 const TransactionsScreen = () => {
+  const router = useRouter();
+  const { transactions, isLoading, loadTransactions } = useTransactions();
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
 
-  const transactions = [
-    {
-      value: 5000,
-      date: "2026-02-28T16:00:00",
-      category: "income",
-      description: "Salário",
-      id: 1,
-    },
-    {
-      value: -1200,
-      date: "2026-02-27T09:30:00",
-      category: "home",
-      description: "Aluguel",
-      id: 2,
-    },
-    {
-      value: -350,
-      date: "2026-02-26T14:10:00",
-      category: "food",
-      description: "Supermercado",
-      id: 3,
-    },
-    {
-      value: -89.9,
-      date: "2026-02-25T19:45:00",
-      category: "leisure",
-      description: "Cinema",
-      id: 4,
-    },
-    {
-      value: -60,
-      date: "2026-02-24T08:20:00",
-      category: "transport",
-      description: "Uber",
-      id: 5,
-    },
-    {
-      value: -220,
-      date: "2026-02-23T11:00:00",
-      category: "health",
-      description: "Consulta médica",
-      id: 6,
-    },
-    {
-      value: -480,
-      date: "2026-02-20T18:15:00",
-      category: "education",
-      description: "Curso online",
-      id: 7,
-    },
-    {
-      value: -150,
-      date: "2026-01-30T13:40:00",
-      category: "food",
-      description: "Restaurante",
-      id: 8,
-    },
-    {
-      value: 800,
-      date: "2026-01-28T10:00:00",
-      category: "income",
-      description: "Freelance",
-      id: 9,
-    },
-    {
-      value: -95,
-      date: "2026-01-26T17:25:00",
-      category: "other",
-      description: "Compras diversas",
-      id: 10,
-    },
-  ];
+  // Carrega transações ao montar o componente
+  useEffect(() => {
+    loadTransactions();
+  }, []);
 
+  // Formata as transações para exibição
   const formattedTransactions = transactions.map((t) => {
     const date = new Date(t.date);
 
@@ -96,6 +32,7 @@ const TransactionsScreen = () => {
     };
   });
 
+  // Filtra as transações baseado em busca, categoria e data
   const filteredTransactions = formattedTransactions.filter((transaction) => {
     if (selectedCategory && transaction.category !== selectedCategory) {
       return false;
@@ -123,11 +60,22 @@ const TransactionsScreen = () => {
     return true;
   });
 
-  const router = useRouter();
-
   const editTransaction = (id) => {
     router.push("(modals)/transaction?id=" + id);
   };
+
+  if (isLoading && transactions.length === 0) {
+    return (
+      <SafeAreaView style={styles.container} edges={["top"]}>
+        <Typography weight="bold" style={styles.title}>
+          Transações
+        </Typography>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -163,6 +111,13 @@ const TransactionsScreen = () => {
             paddingHorizontal: spacing.sm,
             paddingVertical: spacing.md,
           }}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Typography style={styles.emptyText}>
+                Nenhuma transação encontrada
+              </Typography>
+            </View>
+          }
         />
       </View>
     </SafeAreaView>
@@ -183,6 +138,21 @@ const styles = StyleSheet.create({
   },
   transactionsWrapper: {
     flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: 200,
+  },
+  emptyText: {
+    color: colors.textSecondary,
+    fontSize: typography.size.md,
   },
 });
 

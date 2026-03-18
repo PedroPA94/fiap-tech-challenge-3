@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import Animated, { SlideInDown } from "react-native-reanimated";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -19,6 +20,7 @@ import Typography from "../../components/typography";
 import { colors, spacing, typography } from "../../styles/theme";
 import { useForm } from "../../hooks/useForm";
 import { useValidators } from "../../hooks/useValidators";
+import { useTransactions } from "../../contexts/TransactionsContext";
 import TransactionTypeSelector from "./components/TransactionTypeSelector";
 import TransactionValueInput from "./components/TransactionValueInput";
 import TransactionCategorySelector from "./components/TransactionCategorySelector";
@@ -29,11 +31,13 @@ export default function TransactionFormScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const isEditing = !!id;
+  const { addTransaction, updateTransaction, isLoading } = useTransactions();
 
   const { validateText, validateValue } = useValidators();
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
+  const [saveError, setSaveError] = useState(null);
 
   const initialValues = {
     type: "expense",
@@ -76,26 +80,46 @@ export default function TransactionFormScreen() {
     router.back();
   };
 
-  const handleSaveTransaction = (validValues) => {
-    const transactionData = {
-      id: id || Math.random().toString(36).substring(7),
-      type: validValues.type,
-      value: parseFloat(validValues.value),
-      category: validValues.category,
-      description: validValues.description,
-      date: validValues.date,
-    };
+  const handleSaveTransaction = async (validValues) => {
+    setSaveError(null);
 
-    console.log("Transação salva:", transactionData);
+    try {
+      // Converter data no formato "dd/mm/yyyy" para ISO "yyyy-mm-dd"
+      const dateParts = validValues.date.split("/");
+      const isoDate =
+        dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0] + "T00:00:00";
 
-    Alert.alert("Sucesso", "Transação salva com sucesso!", [
-      {
-        text: "OK",
-        onPress: () => {
-          router.back();
-        },
-      },
-    ]);
+      const transactionData = {
+        type: validValues.type,
+        value: parseFloat(validValues.value),
+        category: validValues.category,
+        description: validValues.description,
+        date: isoDate,
+      };
+
+      if (isEditing) {
+        // Atualizar transação existente
+        await updateTransaction(id, transactionData);
+        Alert.alert("Sucesso", "Transação atualizada com sucesso!", [
+          {
+            text: "OK",
+            onPress: () => router.back(),
+          },
+        ]);
+      } else {
+        // Criar nova transação
+        await addTransaction(transactionData);
+        Alert.alert("Sucesso", "Transação criada com sucesso!", [
+          {
+            text: "OK",
+            onPress: () => router.back(),
+          },
+        ]);
+      }
+    } catch (error) {
+      setSaveError(error.message);
+      Alert.alert("Erro", "Falha ao salvar transação: " + error.message);
+    }
   };
 
   const handleTypeChange = (newType) => {
@@ -216,11 +240,28 @@ export default function TransactionFormScreen() {
           style={styles.footer}
           entering={SlideInDown.delay(200).duration(400).springify()}
         >
+          {saveError && (
+            <View style={styles.errorContainer}>
+              <Typography style={styles.errorText}>{saveError}</Typography>
+            </View>
+          )}
           <Button
             onPress={() => handleSubmit(handleSaveTransaction)}
             style={styles.submitButton}
+            disabled={isLoading}
           >
-            Salvar transação
+            {isLoading ? (
+              <View style={styles.buttonContent}>
+                <ActivityIndicator
+                  size="small"
+                  color={colors.white}
+                  style={{ marginRight: spacing.sm }}
+                />
+                <Typography weight="bold">Salvando...</Typography>
+              </View>
+            ) : (
+              "Salvar transação"
+            )}
           </Button>
           <Button secondary onPress={handleClose} style={styles.cancelButton}>
             Cancelar
@@ -272,5 +313,20 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     marginBottom: spacing.sm,
+  },
+  errorContainer: {
+    backgroundColor: colors.error || "#FEE2E2",
+    borderRadius: 8,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  errorText: {
+    color: colors.textError || "#DC2626",
+    fontSize: typography.size.sm,
+  },
+  buttonContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

@@ -7,6 +7,7 @@ import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AuthProvider, useAuth } from "../contexts/AuthContext";
+import { TransactionsProvider } from "../contexts/TransactionsContext";
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -21,18 +22,20 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <AuthProvider>
-        <RootNavigation />
+        <TransactionsProvider>
+          <RootNavigation />
+        </TransactionsProvider>
       </AuthProvider>
     </SafeAreaProvider>
   );
 }
 
 function RootNavigation() {
-  const { loggedIn } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={loggedIn}>
+      <Stack.Protected guard={isAuthenticated}>
         <Stack.Screen name="(tabs)" />
 
         <Stack.Screen
@@ -44,7 +47,7 @@ function RootNavigation() {
         />
       </Stack.Protected>
 
-      <Stack.Protected guard={!loggedIn}>
+      <Stack.Protected guard={!isAuthenticated}>
         <Stack.Screen name="(auth)" />
       </Stack.Protected>
     </Stack>

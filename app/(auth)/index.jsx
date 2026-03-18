@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import Button from "../../components/button";
 import Input from "../../components/input";
@@ -14,14 +14,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Login = () => {
   const router = useRouter();
-
-  const register = () => {
-    router.navigate("/register");
-  };
-
+  const { login, isLoading, error: authError } = useAuth();
   const { validateEmail, validateText } = useValidators();
 
-  const validateLogin = () => {
+  const validateLogin = (values) => {
     const errors = {};
 
     const emailError = validateEmail(values.email);
@@ -38,11 +34,16 @@ const Login = () => {
     validateLogin,
   );
 
-  const { setLoggedIn } = useAuth();
+  const register = () => {
+    router.navigate("/register");
+  };
 
-  const login = () => {
-    console.log("Login válido");
-    setLoggedIn(true);
+  const handleLogin = async (validValues) => {
+    try {
+      await login(validValues.email, validValues.password);
+    } catch (err) {
+      console.error("Erro de login:", err);
+    }
   };
 
   return (
@@ -66,6 +67,10 @@ const Login = () => {
         style={styles.inputContainer}
         entering={FadeInDown.delay(200).duration(350).springify()}
       >
+        {authError && (
+          <Typography style={styles.errorMessage}>{authError}</Typography>
+        )}
+
         <Input
           value={values.email}
           onChangeText={(text) => handleChange("email", text)}
@@ -77,6 +82,7 @@ const Login = () => {
           error={!!errors.email}
           errorMsg={errors.email}
           textContentType="email"
+          editable={!isLoading}
         />
         <Input
           value={values.password}
@@ -91,9 +97,13 @@ const Login = () => {
           errorMsg={errors.password}
           textContentType="password"
           secureTextEntry
+          editable={!isLoading}
         />
-        <Button onPress={() => handleSubmit(login)}>Entrar</Button>
-        <Button onPress={register} secondary>
+
+        <Button onPress={() => handleSubmit(handleLogin)} disabled={isLoading}>
+          {isLoading ? <ActivityIndicator color={colors.white} /> : "Entrar"}
+        </Button>
+        <Button onPress={register} secondary disabled={isLoading}>
           Criar conta
         </Button>
       </Animated.View>
@@ -132,5 +142,10 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: spacing.lg,
     marginTop: spacing.md,
+  },
+  errorMessage: {
+    color: colors.danger,
+    fontSize: typography.size.sm,
+    textAlign: "center",
   },
 });
