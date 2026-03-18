@@ -21,11 +21,11 @@ import { colors, spacing, typography } from "../../styles/theme";
 import { useForm } from "../../hooks/useForm";
 import { useValidators } from "../../hooks/useValidators";
 import { useTransactions } from "../../contexts/TransactionsContext";
-import TransactionTypeSelector from "./components/TransactionTypeSelector";
-import TransactionValueInput from "./components/TransactionValueInput";
-import TransactionCategorySelector from "./components/TransactionCategorySelector";
-import TransactionDateInput from "./components/TransactionDateInput";
-import ReceiptAttachment from "./components/ReceiptAttachment";
+import TransactionTypeSelector from "./components/transactionTypeSelector";
+import TransactionValueInput from "./components/transactionValueInput";
+import TransactionCategorySelector from "./components/transactionCategorySelector";
+import TransactionDateInput from "./components/transactionDateInput";
+import ReceiptAttachment from "./components/receiptAttachment";
 
 export default function TransactionFormScreen() {
   const { id } = useLocalSearchParams();
