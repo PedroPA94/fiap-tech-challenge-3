@@ -8,9 +8,10 @@ export const transactionService = {
   loadTransactions: async () => {
     try {
       const transactions = await mockLoadTransactions();
-      return transactions;
+
+      return transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
     } catch (error) {
-      throw new Error(error.message);
+      throw error;
     }
   },
 

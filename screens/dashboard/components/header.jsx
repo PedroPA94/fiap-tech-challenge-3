@@ -8,7 +8,18 @@ import { colors, spacing, typography } from "../../../styles/theme";
 import { useAuth } from "../../../contexts/AuthContext";
 
 const Header = () => {
-  const { setLoggedIn } = useAuth();
+  const { logout, user } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
+  };
+
+  const userName = user?.name || "Usuário";
+
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
@@ -16,14 +27,14 @@ const Header = () => {
         <View>
           <Typography style={styles.subtitle}>Boas-vindas,</Typography>
           <Typography weight="bold" style={styles.title}>
-            Pedro
+            {userName}
           </Typography>
         </View>
       </View>
       <IconButton
         icon={<Ionicons name="log-out-outline" size={25} color="#94A3B8" />}
         secondary
-        onPress={() => setLoggedIn(false)}
+        onPress={handleLogout}
       />
     </View>
   );

@@ -10,10 +10,17 @@ import {
 import { useRouter } from "expo-router";
 import IconButton from "../../components/iconButton";
 import { Ionicons } from "@expo/vector-icons";
+import { useTransactions } from "../../contexts/TransactionsContext";
+import { useEffect } from "react";
 
 const DashboardScreen = () => {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { loadTransactions } = useTransactions();
+
+  useEffect(() => {
+    loadTransactions();
+  }, [loadTransactions]);
 
   const addTransaction = () => {
     router.push("/(modals)/transaction");

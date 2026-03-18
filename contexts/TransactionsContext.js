@@ -8,6 +8,11 @@ export function TransactionsProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Ordena transações por data (mais recente primeiro)
+  const sortTransactions = useCallback((txs) => {
+    return txs.sort((a, b) => new Date(b.date) - new Date(a.date));
+  }, []);
+
   const loadTransactions = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -25,47 +30,55 @@ export function TransactionsProvider({ children }) {
     }
   }, []);
 
-  const addTransaction = useCallback(async (transactionData) => {
-    setIsLoading(true);
-    setError(null);
+  const addTransaction = useCallback(
+    async (transactionData) => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const newTransaction =
-        await transactionService.addTransaction(transactionData);
-      setTransactions((prev) => [...prev, newTransaction]);
-      return newTransaction;
-    } catch (err) {
-      const errorMessage = err.message || "Erro ao criar transação";
-      setError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+      try {
+        const newTransaction =
+          await transactionService.addTransaction(transactionData);
+        setTransactions((prev) => sortTransactions([...prev, newTransaction]));
+        return newTransaction;
+      } catch (err) {
+        const errorMessage = err.message || "Erro ao criar transação";
+        setError(errorMessage);
+        throw new Error(errorMessage);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [sortTransactions],
+  );
 
-  const updateTransaction = useCallback(async (id, transactionData) => {
-    setIsLoading(true);
-    setError(null);
+  const updateTransaction = useCallback(
+    async (id, transactionData) => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const updatedTransaction = await transactionService.updateTransaction(
-        id,
-        transactionData,
-      );
+      try {
+        const updatedTransaction = await transactionService.updateTransaction(
+          id,
+          transactionData,
+        );
 
-      setTransactions((prev) =>
-        prev.map((t) => (t.id === id ? updatedTransaction : t)),
-      );
+        setTransactions((prev) =>
+          sortTransactions(
+            prev.map((t) => (t.id === id ? updatedTransaction : t)),
+          ),
+        );
 
-      return updatedTransaction;
-    } catch (err) {
-      const errorMessage = err.message || "Erro ao atualizar transação";
-      setError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+        return updatedTransaction;
+      } catch (err) {
+        const errorMessage = err.message || "Erro ao atualizar transação";
+        setError(errorMessage);
+        throw new Error(errorMessage);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [sortTransactions],
+  );
 
   const getTransaction = useCallback(
     (id) => {

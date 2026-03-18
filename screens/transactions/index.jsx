@@ -16,12 +16,10 @@ const TransactionsScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
 
-  // Carrega transações ao montar o componente
   useEffect(() => {
     loadTransactions();
   }, []);
 
-  // Formata as transações para exibição
   const formattedTransactions = transactions.map((t) => {
     const date = new Date(t.date);
 
@@ -32,7 +30,6 @@ const TransactionsScreen = () => {
     };
   });
 
-  // Filtra as transações baseado em busca, categoria e data
   const filteredTransactions = formattedTransactions.filter((transaction) => {
     if (selectedCategory && transaction.category !== selectedCategory) {
       return false;

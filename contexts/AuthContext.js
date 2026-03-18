@@ -30,6 +30,28 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  const register = useCallback(async (name, email, password) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const { user: userData, token: authToken } = await authService.register(
+        name,
+        email,
+        password,
+      );
+      setUser(userData);
+      setToken(authToken);
+      return { user: userData, token: authToken };
+    } catch (err) {
+      const errorMessage = err.message || "Erro ao criar conta";
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   const logout = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -54,6 +76,7 @@ export function AuthProvider({ children }) {
     error,
     isAuthenticated: !!user && !!token,
     login,
+    register,
     logout,
   };
 

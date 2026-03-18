@@ -98,7 +98,6 @@ export default function TransactionFormScreen() {
       };
 
       if (isEditing) {
-        // Atualizar transação existente
         await updateTransaction(id, transactionData);
         Alert.alert("Sucesso", "Transação atualizada com sucesso!", [
           {
@@ -107,7 +106,6 @@ export default function TransactionFormScreen() {
           },
         ]);
       } else {
-        // Criar nova transação
         await addTransaction(transactionData);
         Alert.alert("Sucesso", "Transação criada com sucesso!", [
           {

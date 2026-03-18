@@ -3,19 +3,44 @@ import Card from "../../../components/card";
 import InfoTile from "../../../components/infoTile";
 import Typography from "../../../components/typography";
 import { colors, spacing, typography } from "../../../styles/theme";
+import { useTransactions } from "../../../contexts/TransactionsContext";
 
 const Balance = () => {
+  const { transactions } = useTransactions();
+
+  const totalBalance = transactions.reduce((sum, transaction) => {
+    return sum + transaction.value;
+  }, 0);
+
+  const totalIncome = transactions
+    .filter((t) => t.type === "income")
+    .reduce((sum, t) => sum + t.value, 0);
+
+  const totalExpenses = transactions
+    .filter((t) => t.type === "expense")
+    .reduce((sum, t) => sum + Math.abs(t.value), 0);
+
+  const formatCurrency = (value) => {
+    return (
+      "R$ " +
+      new Intl.NumberFormat("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(Math.abs(value))
+    );
+  };
+
   return (
     <Card kind="primary" style={styles.container}>
       <View style={styles.balanceWrapper}>
         <Typography style={styles.balanceLabel}>Saldo total</Typography>
         <Typography weight="bold" style={styles.balanceValue}>
-          R$ 4.634,10
+          {formatCurrency(totalBalance)}
         </Typography>
       </View>
       <View style={styles.infoWrapper}>
         <InfoTile
-          value="R$ 5.000,00"
+          value={formatCurrency(totalIncome)}
           category={{
             icon: "arrow-down-circle-outline",
             label: "Receitas",
@@ -25,7 +50,7 @@ const Balance = () => {
         />
 
         <InfoTile
-          value="R$ 365,90"
+          value={formatCurrency(totalExpenses)}
           category={{
             icon: "arrow-up-circle-outline",
             label: "Despesas",

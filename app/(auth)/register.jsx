@@ -1,6 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ActivityIndicator, Alert } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import Button from "../../components/button";
 import Input from "../../components/input";
 import Typography from "../../components/typography";
@@ -8,11 +10,16 @@ import { useForm } from "../../hooks/useForm";
 import { useValidators } from "../../hooks/useValidators";
 import { colors, spacing, typography } from "../../styles/theme";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "../../contexts/AuthContext";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Register = () => {
+  const router = useRouter();
+  const { register, isLoading: authLoading } = useAuth();
   const { validateEmail, validateText } = useValidators();
+  const [registroError, setRegistroError] = useState(null);
 
-  const validateRegister = () => {
+  const validateRegister = (values) => {
     const errors = {};
 
     const nameError = validateText(values.name, 3);
@@ -32,65 +39,113 @@ const Register = () => {
     validateRegister,
   );
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.pageTitle}>
-        <Typography weight="bold" style={styles.title}>
-          Criar conta
-        </Typography>
-        <Typography style={styles.subtitle}>
-          Comece a organizar sua vida financeira {"\n"}hoje mesmo!
-        </Typography>
-      </View>
+  const handleRegister = async (validValues) => {
+    setRegistroError(null);
 
-      <Animated.View
-        style={styles.animatedContainer}
-        entering={FadeInDown.duration(350).springify()}
+    try {
+      await register(validValues.name, validValues.email, validValues.password);
+      Alert.alert("Sucesso", "Conta criada com sucesso! Bem-vindo!");
+    } catch (error) {
+      const errorMsg = error.message || "Erro ao criar conta";
+      setRegistroError(errorMsg);
+      Alert.alert("Erro", errorMsg);
+    }
+  };
+
+  const goToLogin = () => {
+    router.back();
+  };
+
+  return (
+    <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.content}
+        enableOnAndroid
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        <View style={styles.inputContainer}>
-          <Input
-            value={values.name}
-            onChangeText={(text) => handleChange("name", text)}
-            label="Nome completo"
-            placeholder="Seu nome"
-            icon={<Ionicons name="person-outline" size={20} color="#94A3B8" />}
-            error={!!errors.name}
-            errorMsg={errors.name}
-          />
-          <Input
-            value={values.email}
-            onChangeText={(text) => handleChange("email", text)}
-            label="Email"
-            placeholder="exemplo@email.com"
-            icon={<Ionicons name="mail-outline" size={20} color="#94A3B8" />}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            error={!!errors.email}
-            errorMsg={errors.email}
-            textContentType="email"
-          />
-          <Input
-            value={values.password}
-            onChangeText={(text) => handleChange("password", text)}
-            label="Senha"
-            placeholder="••••••••"
-            icon={
-              <Ionicons name="lock-closed-outline" size={20} color="#94A3B8" />
-            }
-            autoCapitalize="none"
-            error={!!errors.password}
-            errorMsg={errors.password}
-            textContentType="password"
-            secureTextEntry
-          />
+        <View style={styles.pageTitle}>
+          <Typography weight="bold" style={styles.title}>
+            Criar conta
+          </Typography>
+          <Typography style={styles.subtitle}>
+            Comece a organizar sua vida financeira {"\n"}hoje mesmo!
+          </Typography>
         </View>
-        <Button
-          onPress={() => handleSubmit()}
-          style={{ marginTop: spacing.md }}
+        <Animated.View
+          style={styles.animatedContainer}
+          entering={FadeInDown.duration(350).springify()}
         >
-          Cadastrar
-        </Button>
-      </Animated.View>
+          {registroError && (
+            <Typography
+              style={{ color: colors.danger, marginBottom: spacing.md }}
+            >
+              {registroError}
+            </Typography>
+          )}
+
+          <View style={styles.inputContainer}>
+            <Input
+              value={values.name}
+              onChangeText={(text) => handleChange("name", text)}
+              label="Nome completo"
+              placeholder="Seu nome"
+              icon={
+                <Ionicons name="person-outline" size={20} color="#94A3B8" />
+              }
+              error={!!errors.name}
+              errorMsg={errors.name}
+              editable={!authLoading}
+            />
+            <Input
+              value={values.email}
+              onChangeText={(text) => handleChange("email", text)}
+              label="Email"
+              placeholder="exemplo@email.com"
+              icon={<Ionicons name="mail-outline" size={20} color="#94A3B8" />}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              error={!!errors.email}
+              errorMsg={errors.email}
+              textContentType="email"
+              editable={!authLoading}
+            />
+            <Input
+              value={values.password}
+              onChangeText={(text) => handleChange("password", text)}
+              label="Senha"
+              placeholder="••••••••"
+              icon={
+                <Ionicons
+                  name="lock-closed-outline"
+                  size={20}
+                  color="#94A3B8"
+                />
+              }
+              autoCapitalize="none"
+              error={!!errors.password}
+              errorMsg={errors.password}
+              textContentType="password"
+              secureTextEntry
+              editable={!authLoading}
+            />
+          </View>
+          <Button
+            onPress={() => handleSubmit(handleRegister)}
+            style={{ marginTop: spacing.md }}
+            disabled={authLoading}
+          >
+            {authLoading ? (
+              <ActivityIndicator color={colors.white} />
+            ) : (
+              "Cadastrar"
+            )}
+          </Button>
+          <Button onPress={goToLogin} secondary disabled={authLoading}>
+            Voltar ao login
+          </Button>
+        </Animated.View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
@@ -101,11 +156,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingHorizontal: spacing.lg,
-    justifyContent: "start",
-    gap: spacing.lg,
   },
-  pageTitle: { gap: spacing.sm },
+  content: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingHorizontal: spacing.lg,
+  },
+  pageTitle: {
+    gap: spacing.sm,
+    marginBottom: spacing.md,
+  },
   title: {
     textAlign: "left",
     fontSize: typography.size.xl,
@@ -116,12 +176,9 @@ const styles = StyleSheet.create({
     fontSize: typography.size.md,
   },
   animatedContainer: {
-    flex: 1,
     gap: spacing.lg,
   },
   inputContainer: {
-    width: "100%",
     gap: spacing.lg,
-    marginTop: spacing.md,
   },
 });
