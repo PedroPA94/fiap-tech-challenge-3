@@ -1,14 +1,54 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Typography from "../../../components/typography";
 import { colors, radius, spacing, typography } from "../../../styles/theme";
 
-export default function ReceiptAttachment() {
+import * as DocumentPicker from "expo-document-picker";
+
+const MAX_FILE_SIZE = 300 * 1024; // 300KB
+
+export default function ReceiptAttachment({ onChange }) {
+  const handlePickFile = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ["image/*", "application/pdf"],
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled) return;
+
+      const file = result.assets[0];
+
+      if (file.size && file.size > MAX_FILE_SIZE) {
+        Alert.alert(
+          "Arquivo muito grande",
+          "O comprovante deve ter no máximo 300KB",
+        );
+        return;
+      }
+
+      onChange?.({
+        uri: file.uri,
+        mimeType: file.mimeType,
+        size: file.size,
+        name: file.name,
+      });
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível selecionar o arquivo");
+    }
+  };
+
   return (
-    <View style={styles.receiptPlaceholder}>
-      <Ionicons name="camera" size={24} color={colors.textSecondary} />
-      <Typography style={styles.receiptText}>Anexar comprovante</Typography>
-    </View>
+    <TouchableOpacity
+      style={styles.receiptPlaceholder}
+      onPress={handlePickFile}
+      activeOpacity={0.7}
+    >
+      <Ionicons name="attach" size={24} color={colors.textSecondary} />
+      <Typography style={styles.receiptText}>
+        Anexar comprovante (até 300KB)
+      </Typography>
+    </TouchableOpacity>
   );
 }
 

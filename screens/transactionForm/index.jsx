@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -26,6 +26,7 @@ import TransactionValueInput from "./components/transactionValueInput";
 import TransactionCategorySelector from "./components/transactionCategorySelector";
 import TransactionDateInput from "./components/transactionDateInput";
 import ReceiptAttachment from "./components/receiptAttachment";
+import { transactionService } from "../../services/transactionService";
 
 export default function TransactionFormScreen() {
   const { id } = useLocalSearchParams();
@@ -45,6 +46,7 @@ export default function TransactionFormScreen() {
     category: "",
     description: "",
     date: new Date().toLocaleDateString("pt-BR"),
+    receipt: null,
   };
 
   const validateFormData = (values) => {
@@ -76,6 +78,39 @@ export default function TransactionFormScreen() {
     validateFormData,
   );
 
+  useEffect(() => {
+    if (!isEditing) return;
+
+    const loadTransaction = async () => {
+      try {
+        const transaction = await transactionService.getTransactionById(id);
+
+        const date = new Date(transaction.date);
+        const formattedDate =
+          String(date.getDate()).padStart(2, "0") +
+          "/" +
+          String(date.getMonth() + 1).padStart(2, "0") +
+          "/" +
+          date.getFullYear();
+
+        handleChange("type", transaction.type);
+        handleChange("value", Math.abs(transaction.value).toString());
+        handleChange("category", transaction.category);
+        handleChange("description", transaction.description);
+        handleChange("date", formattedDate);
+
+        if (transaction.receipt) {
+          handleChange("receipt", transaction.receipt);
+        }
+      } catch (error) {
+        Alert.alert("Erro", "Falha ao carregar transação");
+        router.back();
+      }
+    };
+
+    loadTransaction();
+  }, [id]);
+
   const handleClose = () => {
     router.back();
   };
@@ -95,6 +130,7 @@ export default function TransactionFormScreen() {
         category: validValues.category,
         description: validValues.description,
         date: isoDate,
+        receipt: validValues.receipt,
       };
 
       if (isEditing) {
@@ -229,7 +265,9 @@ export default function TransactionFormScreen() {
                 errorMsg={errors.date}
               />
 
-              <ReceiptAttachment />
+              <ReceiptAttachment
+                onChange={(file) => handleChange("receipt", file)}
+              />
             </View>
           </Animated.View>
         </ScrollView>

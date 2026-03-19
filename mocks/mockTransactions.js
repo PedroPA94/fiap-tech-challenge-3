@@ -14,6 +14,7 @@ const MOCK_TRANSACTIONS = [
     category: "home",
     description: "Aluguel",
     type: "expense",
+    userId: "123",
   },
   {
     id: "3",
